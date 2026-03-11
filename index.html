@@ -27,8 +27,8 @@
   --bg: #f8f9fa;
   --white: #ffffff;
   --border: #e5e7eb;
-  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
   --radius: 12px;
 }
 
@@ -36,161 +36,126 @@ body {
   font-family: 'Poppins', sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
 }
 
-/* Password Screen */
-#password-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-}
-.password-box {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 48px;
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  max-width: 420px;
-  width: 90%;
-}
-.password-box img { height: 40px; margin-bottom: 24px; }
-.password-box h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-.password-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
-.password-box input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.password-box input:focus { border-color: var(--primary); }
-.password-box button {
-  width: 100%;
-  padding: 12px;
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: background 0.2s;
-}
-.password-box button:hover { background: var(--primary-dark); }
-.password-error { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
-
-/* Main App */
-#app { display: none; }
-
-.app-header {
+/* Top Bar */
+.top-bar {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: var(--white);
-  padding: 24px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-lg);
-}
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 52px;
 }
-.header-inner h1 { font-size: 22px; font-weight: 700; }
-.header-inner h1 span { font-weight: 300; opacity: 0.85; }
+.top-bar h1 { font-size: 16px; font-weight: 600; }
+.top-bar h1 span { font-weight: 300; opacity: 0.8; }
+.top-bar select {
+  padding: 4px 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+.top-bar select option { color: var(--text); background: var(--white); }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+/* Step indicator */
+.step-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transition: all 0.3s;
+}
+.step-dot.active { background: var(--white); width: 24px; border-radius: 4px; }
+.step-dot.done { background: rgba(255,255,255,0.7); }
 
-.section-title {
-  font-size: 13px;
+/* Steps */
+.step {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 52px);
+  margin-top: 52px;
+  padding: 24px;
+  position: relative;
+  overflow-y: auto;
+}
+.step.active { display: flex; }
+.step-inner {
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Step 1: Inputs */
+.step-label {
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: var(--primary);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-title::before {
-  content: '';
-  width: 4px;
-  height: 18px;
-  background: var(--primary);
-  border-radius: 2px;
-}
-
-.card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  margin-bottom: 24px;
-}
-.card-header {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.card-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-.card-icon.teal { background: var(--primary-bg); }
-.card-icon.orange { background: #fef3f0; }
-.card-icon.green { background: var(--green-bg); }
-
-.input-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-@media (max-width: 640px) { .input-grid { grid-template-columns: 1fr; } }
-
-.input-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
   margin-bottom: 6px;
 }
-.input-wrap { position: relative; }
-.input-wrap .prefix, .input-wrap .suffix {
+.step-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.step-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 500px) { .input-row { grid-template-columns: 1fr; } }
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.field-wrap { position: relative; }
+.field-wrap .pfx, .field-wrap .sfx {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
   pointer-events: none;
 }
-.input-wrap .prefix { left: 14px; }
-.input-wrap .suffix { right: 14px; font-size: 14px; font-weight: 500; }
-.input-group input[type="number"],
-.input-group select {
+.field-wrap .pfx { left: 12px; }
+.field-wrap .sfx { right: 12px; font-size: 13px; font-weight: 500; }
+.field input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border: 2px solid var(--border);
   border-radius: 8px;
   font-family: inherit;
@@ -200,16 +165,99 @@ body {
   transition: border-color 0.2s;
   -moz-appearance: textfield;
 }
-.input-group input::-webkit-outer-spin-button,
-.input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.input-group input:focus, .input-group select:focus { border-color: var(--primary); }
-.has-prefix { padding-left: 30px !important; }
-.has-suffix { padding-right: 36px !important; }
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.field input:focus { border-color: var(--primary); }
+.has-pfx { padding-left: 28px !important; }
+.has-sfx { padding-right: 32px !important; }
 
-.scenario-tabs { display: flex; gap: 12px; margin-bottom: 24px; }
-.scenario-tab {
-  flex: 1;
-  padding: 14px 16px;
+/* Benchmark pills */
+.bench-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.bench-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.bench-pill {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+  white-space: nowrap;
+}
+.bench-pill:hover { border-color: var(--primary-light); background: var(--primary-bg); }
+.bench-pill.active { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); font-weight: 600; }
+.bench-pill .bp-cr { font-weight: 700; color: var(--primary); margin-left: 4px; }
+
+/* Action button */
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+.btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: var(--white); }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-ghost { background: none; color: var(--text-muted); padding: 12px 16px; }
+.btn-ghost:hover { color: var(--text); }
+.btn-orange { background: var(--orange); color: var(--white); }
+.btn-orange:hover { background: var(--orange-dark); }
+
+/* Step 2: Scenarios */
+.model-toggle {
+  display: inline-flex;
+  background: var(--white);
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.model-btn {
+  padding: 6px 16px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.model-btn.active {
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.scenario-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.sc-card {
+  padding: 16px;
   border: 2px solid var(--border);
   border-radius: 10px;
   cursor: pointer;
@@ -217,28 +265,21 @@ body {
   transition: all 0.2s;
   background: var(--white);
 }
-.scenario-tab:hover { border-color: var(--primary-light); }
-.scenario-tab.active { border-color: var(--primary); background: var(--primary-bg); }
-.scenario-tab .label {
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-.scenario-tab .value { font-size: 20px; font-weight: 700; color: var(--primary); }
+.sc-card:hover { border-color: var(--primary-light); }
+.sc-card.active { border-color: var(--primary); background: var(--primary-bg); }
+.sc-card .sc-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 2px; }
+.sc-card .sc-pct { font-size: 24px; font-weight: 700; color: var(--primary); }
 
-.scenario-custom {
-  margin-top: 8px;
+.custom-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
-.scenario-custom input {
-  width: 80px;
-  padding: 8px 12px;
+.custom-row span { font-size: 12px; color: var(--text-muted); }
+.custom-row input {
+  width: 64px;
+  padding: 6px 10px;
   border: 2px solid var(--border);
   border-radius: 6px;
   font-family: inherit;
@@ -247,72 +288,69 @@ body {
   text-align: center;
   outline: none;
 }
-.scenario-custom input:focus { border-color: var(--primary); }
-.scenario-custom .lbl { font-size: 13px; color: var(--text-muted); }
+.custom-row input:focus { border-color: var(--primary); }
 
-.impact-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+.preview-box {
+  background: var(--primary-bg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
   margin-bottom: 24px;
 }
-@media (max-width: 768px) { .impact-grid { grid-template-columns: 1fr; } }
+.pv-item .pv-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 500; }
+.pv-item .pv-value { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
 
-.impact-card {
+/* Step 3: Impact */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 500px) { .hero-grid { grid-template-columns: 1fr; } }
+
+.hero-card {
   border-radius: 10px;
   padding: 20px;
   text-align: center;
-  transition: transform 0.2s;
 }
-.impact-card:hover { transform: translateY(-2px); }
-.impact-card .ic-label {
+.hero-card .hc-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.hero-card .hc-value { font-size: 28px; font-weight: 700; line-height: 1.2; }
+.hero-card .hc-sub { font-size: 11px; margin-top: 4px; opacity: 0.75; }
+.hero-card.green { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #065f46; border: 1px solid #a7f3d0; }
+.hero-card.red { background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #991b1b; border: 1px solid #fecaca; }
+.hero-card.teal { background: var(--primary-bg); color: var(--primary-dark); border: 1px solid var(--primary-light); }
+.hero-card.yellow { background: var(--yellow-bg); color: #92400e; border: 1px solid #fde68a; }
+
+.hero-card.wide { grid-column: 1 / -1; }
+
+.chart-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.chart-box canvas { height: 200px !important; }
+
+/* Step 4: Breakdown */
+.step4-inner {
+  width: 100%;
+  max-width: 820px;
+}
+.tbl-wrap { overflow-x: auto; margin-bottom: 16px; }
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 8px;
 }
-.impact-card .ic-value { font-size: 28px; font-weight: 700; line-height: 1.2; }
-.impact-card .ic-sub { font-size: 12px; margin-top: 4px; opacity: 0.8; }
-.impact-card.green-card { background: var(--green-bg); color: #065f46; border: 1px solid #a7f3d0; }
-.impact-card.red-card { background: var(--red-bg); color: #991b1b; border: 1px solid #fecaca; }
-.impact-card.yellow-card { background: var(--yellow-bg); color: #92400e; border: 1px solid #fde68a; }
-.impact-card.teal-card { background: var(--primary-bg); color: var(--primary-dark); border: 1px solid var(--primary-light); }
-
-.big-number-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-@media (max-width: 640px) { .big-number-row { grid-template-columns: 1fr; } }
-
-.big-number {
-  border-radius: 12px;
-  padding: 28px;
-  text-align: center;
-}
-.big-number .bn-label {
-  font-size: 13px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.big-number .bn-value { font-size: 36px; font-weight: 700; line-height: 1.2; }
-.big-number .bn-sub { font-size: 13px; margin-top: 6px; opacity: 0.75; }
-.big-number.green-hero { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #065f46; border: 1px solid #a7f3d0; }
-.big-number.red-hero { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); color: #991b1b; border: 1px solid #fecaca; }
-
-.chart-wrap { position: relative; height: 340px; margin-bottom: 16px; }
-
-.month-table-wrap { overflow-x: auto; }
-.month-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.month-table th {
-  padding: 10px 14px;
+.tbl th {
+  padding: 8px 10px;
   text-align: right;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   background: var(--bg);
@@ -320,537 +358,467 @@ body {
   color: var(--text-muted);
   white-space: nowrap;
 }
-.month-table th:first-child { text-align: left; }
-.month-table td {
-  padding: 10px 14px;
+.tbl th:first-child { text-align: left; }
+.tbl td {
+  padding: 6px 10px;
   text-align: right;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
+  font-size: 12px;
 }
-.month-table td:first-child { text-align: left; font-weight: 500; color: var(--text-muted); }
-.month-table tr:last-child td { border-bottom: none; }
-.month-table .baseline { color: var(--text-muted); }
-.month-table .gain { color: var(--green); font-weight: 600; }
-.month-table tr:hover td { background: var(--primary-bg); }
-.month-table tfoot td {
+.tbl td:first-child { text-align: left; font-weight: 500; color: var(--text-muted); }
+.tbl .gain { color: var(--green); font-weight: 600; }
+.tbl .loss { color: var(--red); font-weight: 600; }
+.tbl tfoot td {
   font-weight: 700;
   border-top: 2px solid var(--primary);
   background: var(--primary-bg);
   color: var(--primary-dark);
+  font-size: 12px;
 }
 
-.benchmark-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-}
-.benchmark-item {
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  text-align: center;
-  background: var(--white);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.benchmark-item:hover, .benchmark-item.active {
-  border-color: var(--primary);
-  background: var(--primary-bg);
-}
-.benchmark-item .bi-name { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-.benchmark-item .bi-value { font-size: 18px; font-weight: 700; color: var(--primary); }
-
-.toggle-wrap {
-  display: flex;
-  background: var(--bg);
-  border-radius: 8px;
-  padding: 4px;
-  border: 1px solid var(--border);
-  width: fit-content;
-  margin-bottom: 20px;
-}
-.toggle-btn {
-  padding: 8px 20px;
-  border: none;
-  background: none;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 6px;
-  color: var(--text-muted);
-  transition: all 0.2s;
-}
-.toggle-btn.active {
-  background: var(--white);
-  color: var(--primary);
+.section-head {
+  font-size: 14px;
   font-weight: 600;
-  box-shadow: var(--shadow);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.currency-toggle select {
-  padding: 6px 12px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 6px;
-  background: rgba(255,255,255,0.15);
+.cta-bar {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: var(--white);
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-}
-.currency-toggle select option { color: var(--text); background: var(--white); }
-
-.cta-banner {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: var(--white);
-  border-radius: var(--radius);
-  padding: 36px;
+  border-radius: 10px;
+  padding: 20px;
   text-align: center;
-  margin-top: 32px;
+  margin-top: 8px;
 }
-.cta-banner h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-.cta-banner p { font-size: 15px; opacity: 0.9; margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.cta-banner .cta-btn {
+.cta-bar h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.cta-bar p { font-size: 12px; opacity: 0.9; margin-bottom: 12px; }
+.cta-bar a {
   display: inline-block;
-  padding: 14px 32px;
+  padding: 10px 24px;
   background: var(--orange);
   color: var(--white);
   border: none;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
   text-decoration: none;
   transition: background 0.2s;
 }
-.cta-banner .cta-btn:hover { background: var(--orange-dark); }
+.cta-bar a:hover { background: var(--orange-dark); }
 
-.app-footer {
-  text-align: center;
-  padding: 24px;
-  color: var(--text-muted);
-  font-size: 13px;
-  border-top: 1px solid var(--border);
-  margin-top: 48px;
-}
-
-@media print {
-  .app-header { position: relative; }
-  .cta-banner, .app-footer { display: none; }
-  body { background: white; }
-}
+/* Transitions */
+.step { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<!-- PASSWORD SCREEN -->
-<div id="password-screen">
-  <div class="password-box">
-    <img src="https://nishantpandey-growisto.github.io/cro-audit-knya/growisto-logo.png" alt="Growisto" onerror="this.style.display='none'">
-    <h2>CRO Impact Calculator</h2>
-    <p>Enter the password to access this tool</p>
-    <input type="password" id="pwd-input" placeholder="Enter password" autofocus>
-    <button id="pwd-btn">Unlock</button>
-    <div class="password-error" id="pwd-error">Incorrect password. Try again.</div>
+<!-- TOP BAR -->
+<div class="top-bar">
+  <h1>CRO Impact Calculator <span>| Growisto</span></h1>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div class="step-dots" id="step-dots"></div>
+    <select id="currency-sel"></select>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="app">
-  <header class="app-header">
-    <div class="header-inner">
-      <div>
-        <h1>CRO Impact Calculator <span>| Growisto</span></h1>
-      </div>
-      <div class="currency-toggle">
-        <select id="currency-select"></select>
-      </div>
-    </div>
-  </header>
+<!-- STEP 1: YOUR NUMBERS -->
+<div class="step active" id="step-1" data-step="1">
+  <div class="step-inner">
+    <div class="step-label">Step 1 of 4</div>
+    <div class="step-title">Enter Your Store's Numbers</div>
+    <div class="step-subtitle">We'll calculate how much revenue you're leaving on the table.</div>
 
-  <div class="container">
-    <!-- INPUTS -->
-    <div class="section-title">Current State</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon teal">&#128202;</div>
-        Enter Your Store's Current Numbers
+    <div class="input-row">
+      <div class="field">
+        <label>Current Monthly Revenue</label>
+        <div class="field-wrap">
+          <span class="pfx" id="pfx-rev"></span>
+          <input type="number" id="in-revenue" class="has-pfx" value="5000000" min="0" step="100000">
+        </div>
       </div>
-      <div class="input-grid">
-        <div class="input-group">
-          <label>Current Monthly Revenue</label>
-          <div class="input-wrap">
-            <span class="prefix" id="currency-prefix"></span>
-            <input type="number" id="input-revenue" class="has-prefix" value="5000000" min="0" step="100000">
-          </div>
-        </div>
-        <div class="input-group">
-          <label>Current Conversion Rate</label>
-          <div class="input-wrap">
-            <input type="number" id="input-cr" class="has-suffix" value="1.25" min="0" max="100" step="0.01">
-            <span class="suffix">%</span>
-          </div>
-        </div>
-        <div class="input-group">
-          <label>Average Order Value (optional)</label>
-          <div class="input-wrap">
-            <span class="prefix" id="aov-prefix"></span>
-            <input type="number" id="input-aov" class="has-prefix" value="" min="0" step="100" placeholder="Auto-calculated">
-          </div>
-        </div>
-        <div class="input-group">
-          <label>Monthly Sessions (optional)</label>
-          <div class="input-wrap">
-            <input type="number" id="input-sessions" value="" min="0" step="1000" placeholder="For deeper analysis">
-          </div>
+      <div class="field">
+        <label>Current Conversion Rate</label>
+        <div class="field-wrap">
+          <input type="number" id="in-cr" class="has-sfx" value="1.25" min="0" max="100" step="0.01">
+          <span class="sfx">%</span>
         </div>
       </div>
     </div>
 
-    <!-- BENCHMARKS -->
-    <div class="section-title">Industry Benchmarks</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon teal">&#127991;&#65039;</div>
-        Compare Against Industry Median CR
-      </div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Click a category to see the typical conversion rate. Source: Growisto analysis of 36+ e-commerce brands.</p>
-      <div class="benchmark-grid" id="benchmark-grid"></div>
-    </div>
+    <div class="bench-label">Or pick your industry benchmark CR:</div>
+    <div class="bench-grid" id="bench-grid"></div>
 
-    <!-- SCENARIOS -->
-    <div class="section-title">CRO Improvement Scenarios</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon orange">&#127919;</div>
-        What Conversion Rate Improvement Can You Achieve?
-      </div>
-      <div class="toggle-wrap">
-        <button class="toggle-btn active" id="btn-compound">Compounding (12-month)</button>
-        <button class="toggle-btn" id="btn-simple">Simple (Flat)</button>
-      </div>
-      <div class="scenario-tabs" id="scenario-tabs"></div>
-      <div class="scenario-custom">
-        <span class="lbl">Custom improvement:</span>
-        <input type="number" id="input-improvement" value="10" min="1" max="100" step="1">
-        <span class="lbl">% uplift on current CR</span>
-      </div>
-    </div>
-
-    <!-- IMPACT -->
-    <div class="section-title">The Impact</div>
-
-    <div class="big-number-row">
-      <div class="big-number green-hero">
-        <div class="bn-label">Total 12-Month Added Revenue</div>
-        <div class="bn-value" id="res-yearly-revenue">-</div>
-        <div class="bn-sub">With just a <span id="res-improvement-pct">10</span>% conversion rate improvement</div>
-      </div>
-      <div class="big-number red-hero">
-        <div class="bn-label">Money Left on the Table</div>
-        <div class="bn-value" id="res-cost-inaction">-</div>
-        <div class="bn-sub">Every month you delay optimizing conversions</div>
-      </div>
-    </div>
-
-    <div class="impact-grid">
-      <div class="impact-card teal-card">
-        <div class="ic-label">New Conversion Rate</div>
-        <div class="ic-value" id="res-new-cr">-</div>
-        <div class="ic-sub">Up from <span id="res-old-cr">-</span></div>
-      </div>
-      <div class="impact-card green-card">
-        <div class="ic-label">New Monthly Revenue</div>
-        <div class="ic-value" id="res-new-revenue">-</div>
-        <div class="ic-sub">By month 12</div>
-      </div>
-      <div class="impact-card yellow-card">
-        <div class="ic-label">Daily Cost of Inaction</div>
-        <div class="ic-value" id="res-daily-cost">-</div>
-        <div class="ic-sub">Lost revenue per day</div>
-      </div>
-    </div>
-
-    <!-- CHART -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon green">&#128200;</div>
-        Revenue Growth Trajectory
-      </div>
-      <div class="chart-wrap">
-        <canvas id="revenue-chart"></canvas>
-      </div>
-    </div>
-
-    <!-- MONTH TABLE -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon teal">&#128197;</div>
-        Month-by-Month Breakdown
-      </div>
-      <div class="month-table-wrap">
-        <table class="month-table" id="month-table">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Baseline Revenue</th>
-              <th>Projected Revenue</th>
-              <th>Incremental Revenue</th>
-              <th>Cumulative Gain</th>
-            </tr>
-          </thead>
-          <tbody id="month-tbody"></tbody>
-          <tfoot id="month-tfoot"></tfoot>
-        </table>
-      </div>
-    </div>
-
-    <!-- COMPARISON -->
-    <div class="section-title">Scenario Comparison</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon orange">&#9889;</div>
-        Conservative vs Target vs Aggressive
-      </div>
-      <div class="month-table-wrap">
-        <table class="month-table">
-          <thead>
-            <tr>
-              <th style="text-align:left">Metric</th>
-              <th>Conservative (5%)</th>
-              <th>Target (10%)</th>
-              <th>Aggressive (15%)</th>
-            </tr>
-          </thead>
-          <tbody id="comparison-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- CTA -->
-    <div class="cta-banner">
-      <h3>Ready to Capture This Revenue?</h3>
-      <p>Growisto's CRO-led development team has driven 46% peak conversion growth for TyresNmore, 167% conversion growth for Atomberg, and saved Rs.1Cr/month for Powerlook.</p>
-      <a href="https://www.growisto.com" target="_blank" class="cta-btn">Talk to Growisto</a>
+    <div class="action-row">
+      <div></div>
+      <button class="btn btn-primary" id="btn-to-2">Calculate Impact &rarr;</button>
     </div>
   </div>
+</div>
 
-  <footer class="app-footer">
-    Powered by Growisto | CRO-Led E-commerce Development
-  </footer>
+<!-- STEP 2: SCENARIO -->
+<div class="step" id="step-2" data-step="2">
+  <div class="step-inner">
+    <div class="step-label">Step 2 of 4</div>
+    <div class="step-title">Choose Your Scenario</div>
+    <div class="step-subtitle">How much can CRO improve your conversion rate?</div>
+
+    <div class="model-toggle">
+      <button class="model-btn active" id="m-compound">Compounding (12-mo)</button>
+      <button class="model-btn" id="m-simple">Simple (Flat)</button>
+    </div>
+
+    <div class="scenario-cards" id="sc-cards"></div>
+
+    <div class="custom-row">
+      <span>Custom:</span>
+      <input type="number" id="in-improvement" value="10" min="1" max="100" step="1">
+      <span>% uplift on current CR</span>
+    </div>
+
+    <div class="preview-box" id="preview-box">
+      <div class="pv-item">
+        <div class="pv-label">Current CR</div>
+        <div class="pv-value" id="pv-old-cr">1.25%</div>
+      </div>
+      <div class="pv-item">
+        <div class="pv-label">New CR (Month 12)</div>
+        <div class="pv-value" id="pv-new-cr">1.38%</div>
+      </div>
+      <div class="pv-item">
+        <div class="pv-label">CR Uplift</div>
+        <div class="pv-value" id="pv-uplift">+10%</div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-ghost" id="btn-back-1">&larr; Back</button>
+      <button class="btn btn-primary" id="btn-to-3">See Your Impact &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: IMPACT -->
+<div class="step" id="step-3" data-step="3">
+  <div class="step-inner">
+    <div class="step-label">Step 3 of 4</div>
+    <div class="step-title">The Impact</div>
+    <div class="step-subtitle" id="impact-subtitle">With a 10% CR improvement over 12 months</div>
+
+    <div class="hero-grid">
+      <div class="hero-card green">
+        <div class="hc-label">12-Month Added Revenue</div>
+        <div class="hc-value" id="h-total">-</div>
+      </div>
+      <div class="hero-card red">
+        <div class="hc-label">Monthly Cost of Inaction</div>
+        <div class="hc-value" id="h-monthly-cost">-</div>
+      </div>
+      <div class="hero-card teal">
+        <div class="hc-label">New Conversion Rate</div>
+        <div class="hc-value" id="h-new-cr">-</div>
+        <div class="hc-sub">Up from <span id="h-old-cr">-</span></div>
+      </div>
+      <div class="hero-card yellow">
+        <div class="hc-label">Daily Cost of Inaction</div>
+        <div class="hc-value" id="h-daily-cost">-</div>
+        <div class="hc-sub">Lost revenue per day</div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="rev-chart"></canvas>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-ghost" id="btn-back-2">&larr; Back</button>
+      <button class="btn btn-primary" id="btn-to-4">View Full Breakdown &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: BREAKDOWN -->
+<div class="step" id="step-4" data-step="4">
+  <div class="step4-inner">
+    <div class="step-label">Step 4 of 4</div>
+    <div class="step-title">Full Breakdown</div>
+    <div class="step-subtitle">Month-by-month projections and scenario comparison</div>
+
+    <div class="section-head">Month-by-Month</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Month</th><th>Baseline</th><th>Projected</th><th>Incremental</th><th>Cumulative</th></tr></thead>
+        <tbody id="m-tbody"></tbody>
+        <tfoot id="m-tfoot"></tfoot>
+      </table>
+    </div>
+
+    <div class="section-head">3-Scenario Comparison</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th style="text-align:left">Metric</th><th>Conservative (5%)</th><th>Target (10%)</th><th>Aggressive (15%)</th></tr></thead>
+        <tbody id="c-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="cta-bar">
+      <h3>Ready to Capture This Revenue?</h3>
+      <p>Growisto has driven 46% peak CR growth for TyresNmore, 167% CR growth for Atomberg, and saved Rs.1Cr/month for Powerlook.</p>
+      <a href="https://www.growisto.com" target="_blank">Talk to Growisto</a>
+    </div>
+
+    <div class="action-row" style="margin-top:16px;">
+      <button class="btn btn-ghost" id="btn-back-3">&larr; Back</button>
+      <button class="btn btn-ghost" id="btn-restart">Start Over</button>
+    </div>
+  </div>
 </div>
 
 <script>
 (function() {
   'use strict';
 
-  // State
-  var currentModel = 'compound';
-  var currentImprovement = 10;
+  var state = { model: 'compound', improvement: 10, step: 1 };
   var chart = null;
   var CURRENCIES = { INR: '\u20B9', USD: '$', GBP: '\u00A3', EUR: '\u20AC' };
-  var currencySymbol = '\u20B9';
+  var sym = '\u20B9';
 
   var BENCHMARKS = [
-    { name: 'Beauty & Personal Care', cr: 1.44 },
-    { name: 'Food & Beverages', cr: 2.05 },
-    { name: 'Health & Wellness', cr: 1.70 },
-    { name: 'Fashion & Apparel', cr: 0.57 },
-    { name: 'Electronics & Tech', cr: 0.15 },
+    { name: 'Beauty', cr: 1.44 },
+    { name: 'Food & Bev', cr: 2.05 },
+    { name: 'Health', cr: 1.70 },
+    { name: 'Fashion', cr: 0.57 },
+    { name: 'Electronics', cr: 0.15 },
     { name: 'Home & Living', cr: 0.64 },
-    { name: 'Toys & Hobbies', cr: 1.11 },
+    { name: 'Toys', cr: 1.11 },
     { name: 'Jewelry', cr: 0.06 }
   ];
 
-  // DOM helpers
   function $(id) { return document.getElementById(id); }
-  function setText(id, text) { $(id).textContent = text; }
+  function setText(id, t) { $(id).textContent = t; }
 
-  // Password
-  function checkPassword() {
-    var pwd = $('pwd-input').value.trim().toLowerCase();
-    if (pwd === 'growisto2026' || pwd === 'growisto') {
-      $('password-screen').style.display = 'none';
-      $('app').style.display = 'block';
-      initApp();
-    } else {
-      $('pwd-error').style.display = 'block';
+  // Navigation
+  function goStep(n) {
+    state.step = n;
+    document.querySelectorAll('.step').forEach(function(el) { el.classList.remove('active'); });
+    $('step-' + n).classList.add('active');
+    updateDots();
+    if (n >= 3) recalculate();
+  }
+
+  function updateDots() {
+    var dots = $('step-dots');
+    while (dots.firstChild) dots.removeChild(dots.firstChild);
+    for (var i = 1; i <= 4; i++) {
+      var d = document.createElement('div');
+      d.className = 'step-dot';
+      if (i === state.step) d.classList.add('active');
+      else if (i < state.step) d.classList.add('done');
+      dots.appendChild(d);
     }
   }
-  $('pwd-btn').addEventListener('click', checkPassword);
-  $('pwd-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkPassword(); });
+
+  // Nav buttons
+  $('btn-to-2').addEventListener('click', function() { goStep(2); updatePreview(); });
+  $('btn-to-3').addEventListener('click', function() { goStep(3); });
+  $('btn-to-4').addEventListener('click', function() { goStep(4); });
+  $('btn-back-1').addEventListener('click', function() { goStep(1); });
+  $('btn-back-2').addEventListener('click', function() { goStep(2); });
+  $('btn-back-3').addEventListener('click', function() { goStep(3); });
+  $('btn-restart').addEventListener('click', function() { goStep(1); });
+
+  // Keyboard nav
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && state.step < 4) goStep(state.step + 1);
+    if (e.key === 'Escape' && state.step > 1) goStep(state.step - 1);
+  });
 
   // Currency
-  function initCurrencySelect() {
-    var sel = $('currency-select');
-    Object.keys(CURRENCIES).forEach(function(key) {
+  (function() {
+    var sel = $('currency-sel');
+    Object.keys(CURRENCIES).forEach(function(k) {
       var opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = CURRENCIES[key] + ' ' + key;
+      opt.value = k;
+      opt.textContent = CURRENCIES[k] + ' ' + k;
       sel.appendChild(opt);
     });
     sel.addEventListener('change', function() {
-      currencySymbol = CURRENCIES[sel.value];
-      $('currency-prefix').textContent = currencySymbol;
-      $('aov-prefix').textContent = currencySymbol;
-      recalculate();
+      sym = CURRENCIES[sel.value];
+      $('pfx-rev').textContent = sym;
+      if (state.step >= 3) recalculate();
     });
-    $('currency-prefix').textContent = currencySymbol;
-    $('aov-prefix').textContent = currencySymbol;
-  }
+    $('pfx-rev').textContent = sym;
+  })();
 
   // Benchmarks
-  function renderBenchmarks() {
-    var grid = $('benchmark-grid');
+  (function() {
+    var grid = $('bench-grid');
     BENCHMARKS.forEach(function(b) {
-      var div = document.createElement('div');
-      div.className = 'benchmark-item';
-      var nameDiv = document.createElement('div');
-      nameDiv.className = 'bi-name';
-      nameDiv.textContent = b.name;
-      var valDiv = document.createElement('div');
-      valDiv.className = 'bi-value';
-      valDiv.textContent = b.cr + '%';
-      div.appendChild(nameDiv);
-      div.appendChild(valDiv);
-      div.addEventListener('click', function() {
-        grid.querySelectorAll('.benchmark-item').forEach(function(el) { el.classList.remove('active'); });
-        div.classList.add('active');
+      var pill = document.createElement('div');
+      pill.className = 'bench-pill';
+      var nameSpan = document.createTextNode(b.name + ' ');
+      var crSpan = document.createElement('span');
+      crSpan.className = 'bp-cr';
+      crSpan.textContent = b.cr + '%';
+      pill.appendChild(nameSpan);
+      pill.appendChild(crSpan);
+      pill.addEventListener('click', function() {
+        grid.querySelectorAll('.bench-pill').forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        $('in-cr').value = b.cr;
       });
-      grid.appendChild(div);
+      grid.appendChild(pill);
     });
-  }
+  })();
 
-  // Scenario tabs
-  function renderScenarioTabs() {
-    var container = $('scenario-tabs');
+  // Scenario cards
+  (function() {
+    var container = $('sc-cards');
     var scenarios = [
       { pct: 5, label: 'Conservative' },
       { pct: 10, label: 'Target' },
       { pct: 15, label: 'Aggressive' }
     ];
     scenarios.forEach(function(s) {
-      var div = document.createElement('div');
-      div.className = 'scenario-tab' + (s.pct === 10 ? ' active' : '');
-      div.id = 'sc-' + s.pct;
+      var card = document.createElement('div');
+      card.className = 'sc-card' + (s.pct === 10 ? ' active' : '');
+      card.id = 'sc-' + s.pct;
       var lbl = document.createElement('div');
-      lbl.className = 'label';
+      lbl.className = 'sc-label';
       lbl.textContent = s.label;
-      var val = document.createElement('div');
-      val.className = 'value';
-      val.textContent = s.pct + '%';
-      div.appendChild(lbl);
-      div.appendChild(val);
-      div.addEventListener('click', function() { setScenario(s.pct); });
-      container.appendChild(div);
+      var pct = document.createElement('div');
+      pct.className = 'sc-pct';
+      pct.textContent = s.pct + '%';
+      card.appendChild(lbl);
+      card.appendChild(pct);
+      card.addEventListener('click', function() {
+        state.improvement = s.pct;
+        $('in-improvement').value = s.pct;
+        container.querySelectorAll('.sc-card').forEach(function(c) { c.classList.remove('active'); });
+        card.classList.add('active');
+        updatePreview();
+      });
+      container.appendChild(card);
     });
-  }
-
-  function setScenario(pct) {
-    currentImprovement = pct;
-    $('input-improvement').value = pct;
-    document.querySelectorAll('.scenario-tab').forEach(function(t) { t.classList.remove('active'); });
-    var el = $('sc-' + pct);
-    if (el) el.classList.add('active');
-    recalculate();
-  }
+  })();
 
   // Model toggle
-  $('btn-compound').addEventListener('click', function() { setModel('compound'); });
-  $('btn-simple').addEventListener('click', function() { setModel('simple'); });
-  function setModel(m) {
-    currentModel = m;
-    $('btn-compound').classList.toggle('active', m === 'compound');
-    $('btn-simple').classList.toggle('active', m === 'simple');
-    recalculate();
+  $('m-compound').addEventListener('click', function() {
+    state.model = 'compound';
+    $('m-compound').classList.add('active');
+    $('m-simple').classList.remove('active');
+    updatePreview();
+  });
+  $('m-simple').addEventListener('click', function() {
+    state.model = 'simple';
+    $('m-simple').classList.add('active');
+    $('m-compound').classList.remove('active');
+    updatePreview();
+  });
+
+  $('in-improvement').addEventListener('input', function() {
+    state.improvement = parseFloat(this.value) || 0;
+    document.querySelectorAll('.sc-card').forEach(function(c) { c.classList.remove('active'); });
+    var match = $('sc-' + state.improvement);
+    if (match) match.classList.add('active');
+    updatePreview();
+  });
+
+  // Preview (Step 2)
+  function updatePreview() {
+    var cr = parseFloat($('in-cr').value) || 0;
+    var imp = state.improvement;
+    var newCR;
+    if (state.model === 'compound') {
+      newCR = cr * (1 + imp / 100);
+    } else {
+      newCR = cr * (1 + imp / 100);
+    }
+    setText('pv-old-cr', cr.toFixed(2) + '%');
+    setText('pv-new-cr', newCR.toFixed(2) + '%');
+    setText('pv-uplift', '+' + imp + '%');
   }
 
   // Formatting
-  function indianFormat(n) {
+  function indianFmt(n) {
     var s = Math.round(n).toString();
     if (s.length <= 3) return s;
     var last3 = s.slice(-3);
     var rest = s.slice(0, -3);
-    var formatted = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
-    return formatted + ',' + last3;
+    return rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3;
   }
   function fmt(n) {
-    if (currencySymbol === '\u20B9') {
-      return currencySymbol + ' ' + indianFormat(Math.round(n));
-    }
-    return currencySymbol + ' ' + Math.round(n).toLocaleString('en-US');
+    if (sym === '\u20B9') return sym + ' ' + indianFmt(Math.round(n));
+    return sym + ' ' + Math.round(n).toLocaleString('en-US');
   }
-  function fmtLakh(n) {
-    if (currencySymbol === '\u20B9') {
-      var lakh = n / 100000;
-      if (lakh >= 100) return currencySymbol + ' ' + (lakh / 100).toFixed(1) + ' Cr';
-      return currencySymbol + ' ' + lakh.toFixed(1) + ' L';
+  function fmtShort(n) {
+    if (sym === '\u20B9') {
+      var l = n / 100000;
+      if (l >= 100) return sym + ' ' + (l / 100).toFixed(1) + ' Cr';
+      return sym + ' ' + l.toFixed(1) + ' L';
     }
-    if (n >= 1000000) return currencySymbol + (n / 1000000).toFixed(1) + 'M';
-    if (n >= 1000) return currencySymbol + (n / 1000).toFixed(0) + 'K';
-    return currencySymbol + Math.round(n);
+    if (n >= 1000000) return sym + (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return sym + (n / 1000).toFixed(0) + 'K';
+    return sym + Math.round(n);
   }
 
   // Core calculation
   function recalculate() {
-    var revenue = parseFloat($('input-revenue').value) || 0;
-    var cr = parseFloat($('input-cr').value) || 0;
-    var improvement = parseFloat($('input-improvement').value) || 0;
-    currentImprovement = improvement;
-
-    // Highlight matching scenario tab
-    document.querySelectorAll('.scenario-tab').forEach(function(t) { t.classList.remove('active'); });
-    var matchEl = $('sc-' + improvement);
-    if (matchEl) matchEl.classList.add('active');
-
+    var revenue = parseFloat($('in-revenue').value) || 0;
+    var cr = parseFloat($('in-cr').value) || 0;
+    var imp = state.improvement;
     var months = 12;
-    var monthlyData = [];
-    var totalIncremental = 0;
+    var data = [];
+    var totalInc = 0;
 
-    if (currentModel === 'compound') {
+    if (state.model === 'compound') {
       for (var m = 1; m <= months; m++) {
-        var impThis = (improvement / 100) * (m / months);
+        var impThis = (imp / 100) * (m / months);
         var newCR = cr * (1 + impThis);
         var newRev = revenue * (1 + impThis);
         var inc = newRev - revenue;
-        totalIncremental += inc;
-        monthlyData.push({ month: m, baseline: revenue, projected: newRev, incremental: inc, cumulative: totalIncremental, cr: newCR });
+        totalInc += inc;
+        data.push({ month: m, baseline: revenue, projected: newRev, incremental: inc, cumulative: totalInc, cr: newCR });
       }
     } else {
-      var newCRFlat = cr * (1 + improvement / 100);
-      var newRevFlat = revenue * (1 + improvement / 100);
-      var incFlat = newRevFlat - revenue;
+      var newCRF = cr * (1 + imp / 100);
+      var newRevF = revenue * (1 + imp / 100);
+      var incF = newRevF - revenue;
       for (var m2 = 1; m2 <= months; m2++) {
-        totalIncremental += incFlat;
-        monthlyData.push({ month: m2, baseline: revenue, projected: newRevFlat, incremental: incFlat, cumulative: totalIncremental, cr: newCRFlat });
+        totalInc += incF;
+        data.push({ month: m2, baseline: revenue, projected: newRevF, incremental: incF, cumulative: totalInc, cr: newCRF });
       }
     }
 
-    var finalMonth = monthlyData[months - 1];
-    var avgMonthlyInc = totalIncremental / months;
+    var final = data[months - 1];
+    var avgMonthly = totalInc / months;
 
-    // Update DOM
-    setText('res-yearly-revenue', fmt(totalIncremental));
-    setText('res-cost-inaction', fmt(avgMonthlyInc));
-    setText('res-improvement-pct', improvement.toString());
-    setText('res-new-cr', finalMonth.cr.toFixed(2) + '%');
-    setText('res-old-cr', cr.toFixed(2) + '%');
-    setText('res-new-revenue', fmt(finalMonth.projected));
-    setText('res-daily-cost', fmt(avgMonthlyInc / 30));
+    // Step 3 — hero cards
+    setText('impact-subtitle', 'With a ' + imp + '% CR improvement over 12 months');
+    setText('h-total', fmt(totalInc));
+    setText('h-monthly-cost', fmt(avgMonthly));
+    setText('h-new-cr', final.cr.toFixed(2) + '%');
+    setText('h-old-cr', cr.toFixed(2) + '%');
+    setText('h-daily-cost', fmt(avgMonthly / 30));
 
-    updateChart(monthlyData);
-    updateMonthTable(monthlyData, totalIncremental);
+    // Chart
+    updateChart(data);
+
+    // Step 4 — tables
+    updateMonthTable(data, totalInc);
     updateComparisonTable(revenue, cr);
   }
 
-  // Chart
   function updateChart(data) {
-    var ctx = $('revenue-chart').getContext('2d');
-    var labels = data.map(function(d) { return 'Month ' + d.month; });
-    var baselineData = data.map(function(d) { return d.baseline; });
-    var projectedData = data.map(function(d) { return d.projected; });
+    var ctx = $('rev-chart').getContext('2d');
+    var labels = data.map(function(d) { return 'M' + d.month; });
+    var baseline = data.map(function(d) { return d.baseline; });
+    var projected = data.map(function(d) { return d.projected; });
 
     if (chart) chart.destroy();
     chart = new Chart(ctx, {
@@ -858,28 +826,8 @@ body {
       data: {
         labels: labels,
         datasets: [
-          {
-            label: 'Baseline (No CRO)',
-            data: baselineData,
-            borderColor: '#9ca3af',
-            backgroundColor: 'rgba(156,163,175,0.1)',
-            borderWidth: 2,
-            borderDash: [6, 4],
-            fill: false,
-            pointRadius: 0,
-            tension: 0
-          },
-          {
-            label: 'With CRO Improvement',
-            data: projectedData,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16,185,129,0.08)',
-            borderWidth: 3,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#10b981',
-            tension: 0.3
-          }
+          { label: 'Baseline', data: baseline, borderColor: '#9ca3af', borderWidth: 2, borderDash: [6,4], fill: false, pointRadius: 0, tension: 0 },
+          { label: 'With CRO', data: projected, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.08)', borderWidth: 2.5, fill: true, pointRadius: 3, pointBackgroundColor: '#10b981', tension: 0.3 }
         ]
       },
       options: {
@@ -887,93 +835,66 @@ body {
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: {
-            position: 'top',
-            labels: { font: { family: 'Poppins', size: 12 }, usePointStyle: true, padding: 20 }
-          },
+          legend: { position: 'top', labels: { font: { family: 'Poppins', size: 11 }, usePointStyle: true, padding: 12 } },
           tooltip: {
             backgroundColor: '#1d1d20',
-            titleFont: { family: 'Poppins', size: 13 },
-            bodyFont: { family: 'Poppins', size: 12 },
-            padding: 12,
+            titleFont: { family: 'Poppins', size: 12 },
+            bodyFont: { family: 'Poppins', size: 11 },
+            padding: 10,
             cornerRadius: 8,
-            callbacks: {
-              label: function(ctx2) { return ctx2.dataset.label + ': ' + fmt(ctx2.parsed.y); }
-            }
+            callbacks: { label: function(c) { return c.dataset.label + ': ' + fmt(c.parsed.y); } }
           }
         },
         scales: {
-          y: {
-            beginAtZero: false,
-            ticks: {
-              font: { family: 'Poppins', size: 11 },
-              callback: function(val) { return fmtLakh(val); }
-            },
-            grid: { color: 'rgba(0,0,0,0.05)' }
-          },
-          x: {
-            ticks: { font: { family: 'Poppins', size: 11 } },
-            grid: { display: false }
-          }
+          y: { beginAtZero: false, ticks: { font: { family: 'Poppins', size: 10 }, callback: function(v) { return fmtShort(v); } }, grid: { color: 'rgba(0,0,0,0.05)' } },
+          x: { ticks: { font: { family: 'Poppins', size: 10 } }, grid: { display: false } }
         }
       }
     });
   }
 
-  // Month table
   function updateMonthTable(data, total) {
-    var tbody = $('month-tbody');
-    var tfoot = $('month-tfoot');
-
-    // Clear
+    var tbody = $('m-tbody');
+    var tfoot = $('m-tfoot');
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
     while (tfoot.firstChild) tfoot.removeChild(tfoot.firstChild);
 
     data.forEach(function(d) {
       var tr = document.createElement('tr');
       var cells = [
-        { text: 'Month ' + d.month, cls: '' },
-        { text: fmt(d.baseline), cls: 'baseline' },
-        { text: fmt(d.projected), cls: '', style: 'color:var(--green);font-weight:600' },
-        { text: '+' + fmt(d.incremental), cls: 'gain' },
-        { text: '+' + fmt(d.cumulative), cls: 'gain' }
+        { t: 'M' + d.month },
+        { t: fmt(d.baseline) },
+        { t: fmt(d.projected), cls: 'gain' },
+        { t: '+' + fmt(d.incremental), cls: 'gain' },
+        { t: '+' + fmt(d.cumulative), cls: 'gain' }
       ];
       cells.forEach(function(c) {
         var td = document.createElement('td');
-        td.textContent = c.text;
+        td.textContent = c.t;
         if (c.cls) td.className = c.cls;
-        if (c.style) td.setAttribute('style', c.style);
         tr.appendChild(td);
       });
       tbody.appendChild(tr);
     });
 
-    var tfRow = document.createElement('tr');
-    var footCells = ['12-Month Total', '', '', '+' + fmt(total), '+' + fmt(total)];
-    footCells.forEach(function(text) {
+    var fr = document.createElement('tr');
+    ['Total', '', '', '+' + fmt(total), '+' + fmt(total)].forEach(function(t) {
       var td = document.createElement('td');
-      td.textContent = text;
-      tfRow.appendChild(td);
+      td.textContent = t;
+      fr.appendChild(td);
     });
-    tfoot.appendChild(tfRow);
+    tfoot.appendChild(fr);
   }
 
-  // Comparison table
   function updateComparisonTable(revenue, cr) {
     var scenarios = [5, 10, 15];
     var results = scenarios.map(function(imp) {
-      var total = 0;
-      var months = 12;
-      var finalCR, finalRev;
-      if (currentModel === 'compound') {
+      var total = 0, finalCR, finalRev, months = 12;
+      if (state.model === 'compound') {
         for (var m = 1; m <= months; m++) {
           var impThis = (imp / 100) * (m / months);
-          var newRev = revenue * (1 + impThis);
-          total += newRev - revenue;
-          if (m === months) {
-            finalCR = cr * (1 + impThis);
-            finalRev = newRev;
-          }
+          total += revenue * impThis;
+          if (m === months) { finalCR = cr * (1 + impThis); finalRev = revenue * (1 + impThis); }
         }
       } else {
         finalCR = cr * (1 + imp / 100);
@@ -983,49 +904,38 @@ body {
       return { imp: imp, finalCR: finalCR, finalRev: finalRev, total: total, monthly: total / 12, daily: total / 365 };
     });
 
-    var tbody = $('comparison-tbody');
+    var tbody = $('c-tbody');
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
 
     var rows = [
-      { label: 'CR Improvement', vals: results.map(function(r) { return '+' + r.imp + '%'; }) },
-      { label: 'New Conversion Rate', vals: results.map(function(r) { return r.finalCR.toFixed(2) + '%'; }) },
-      { label: 'New Monthly Revenue (M12)', vals: results.map(function(r) { return fmt(r.finalRev); }), color: 'var(--green)' },
-      { label: 'Total 12-Month Added Revenue', vals: results.map(function(r) { return fmt(r.total); }), color: 'var(--green)' },
-      { label: 'Avg Monthly Cost of Inaction', vals: results.map(function(r) { return fmt(r.monthly); }), color: 'var(--red)' },
-      { label: 'Daily Cost of Inaction', vals: results.map(function(r) { return fmt(r.daily); }), color: 'var(--red)' }
+      { label: 'New CR', vals: results.map(function(r) { return r.finalCR.toFixed(2) + '%'; }) },
+      { label: 'New Monthly Revenue', vals: results.map(function(r) { return fmt(r.finalRev); }), cls: 'gain' },
+      { label: '12-Month Added Revenue', vals: results.map(function(r) { return fmt(r.total); }), cls: 'gain' },
+      { label: 'Monthly Cost of Inaction', vals: results.map(function(r) { return fmt(r.monthly); }), cls: 'loss' },
+      { label: 'Daily Cost of Inaction', vals: results.map(function(r) { return fmt(r.daily); }), cls: 'loss' }
     ];
 
     rows.forEach(function(row) {
       var tr = document.createElement('tr');
-      var labelTd = document.createElement('td');
-      labelTd.textContent = row.label;
-      labelTd.style.textAlign = 'left';
-      labelTd.style.fontWeight = '500';
-      tr.appendChild(labelTd);
+      var ltd = document.createElement('td');
+      ltd.textContent = row.label;
+      ltd.style.textAlign = 'left';
+      ltd.style.fontWeight = '500';
+      tr.appendChild(ltd);
       row.vals.forEach(function(v) {
         var td = document.createElement('td');
         td.textContent = v;
-        if (row.color) { td.style.color = row.color; td.style.fontWeight = '600'; }
+        if (row.cls) td.className = row.cls;
         tr.appendChild(td);
       });
       tbody.appendChild(tr);
     });
   }
 
-  // Input listeners
-  ['input-revenue', 'input-cr', 'input-aov', 'input-sessions', 'input-improvement'].forEach(function(id) {
-    $(id).addEventListener('input', recalculate);
-  });
-
   // Init
-  function initApp() {
-    initCurrencySelect();
-    renderBenchmarks();
-    renderScenarioTabs();
-    recalculate();
-  }
+  updateDots();
+  updatePreview();
 })();
 </script>
-
 </body>
 </html>
