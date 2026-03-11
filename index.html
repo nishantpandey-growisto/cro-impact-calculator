@@ -440,6 +440,94 @@ body {
 }
 .cta-bar a:hover { background: var(--orange-dark); }
 
+/* Homepage (Step 0) */
+.home-inner {
+  text-align: center;
+  max-width: 640px;
+}
+.home-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 28px;
+  color: var(--white);
+}
+.home-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.home-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+.home-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 36px;
+  text-align: left;
+}
+@media (max-width: 560px) {
+  .home-features { grid-template-columns: 1fr; gap: 10px; }
+  #step-0 { justify-content: flex-start; }
+  .home-icon { width: 48px; height: 48px; font-size: 22px; margin-bottom: 16px; border-radius: 12px; }
+  .home-title { font-size: 24px; }
+  .home-subtitle { font-size: 13px; margin-bottom: 20px; }
+  .home-features { margin-bottom: 24px; }
+  .home-feat { padding: 12px; }
+}
+.home-feat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.home-feat-icon {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+.home-feat h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.home-feat p {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.home-cta {
+  padding: 14px 40px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.15s;
+}
+.home-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.home-powered {
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.home-powered strong { color: var(--primary); font-weight: 600; }
+
 /* Transitions */
 .step { animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
@@ -456,8 +544,38 @@ body {
   </div>
 </div>
 
+<!-- STEP 0: HOMEPAGE -->
+<div class="step active" id="step-0" data-step="0">
+  <div class="home-inner">
+    <div class="home-icon">%</div>
+    <div class="home-title">CRO Impact Calculator</div>
+    <div class="home-subtitle">See exactly how much revenue you're leaving on the table — and what a conversion rate improvement could mean for your business over the next 12 months.</div>
+
+    <div class="home-features">
+      <div class="home-feat">
+        <div class="home-feat-icon">&#x1F4CA;</div>
+        <h3>Revenue Projections</h3>
+        <p>Month-by-month revenue forecast with compounding or simple models</p>
+      </div>
+      <div class="home-feat">
+        <div class="home-feat-icon">&#x1F3AF;</div>
+        <h3>Scenario Comparison</h3>
+        <p>Compare conservative, target, and aggressive uplift scenarios side by side</p>
+      </div>
+      <div class="home-feat">
+        <div class="home-feat-icon">&#x1F4CB;</div>
+        <h3>Copy & Share</h3>
+        <p>One-click copy results for emails, Notion docs, or client proposals</p>
+      </div>
+    </div>
+
+    <button class="home-cta" id="btn-start">Get Started</button>
+    <div class="home-powered">Built by <strong>Growisto</strong> &mdash; 300+ e-commerce clients across 8 industries</div>
+  </div>
+</div>
+
 <!-- STEP 1: YOUR NUMBERS -->
-<div class="step active" id="step-1" data-step="1">
+<div class="step" id="step-1" data-step="1">
   <div class="step-inner">
     <div class="step-label">Step 1 of 3</div>
     <div class="step-title">Enter Your Store's Numbers</div>
@@ -592,7 +710,7 @@ body {
 (function() {
   'use strict';
 
-  var state = { model: 'compound', improvement: 10, step: 1 };
+  var state = { model: 'compound', improvement: 10, step: 0 };
   var chart = null;
   var CURRENCIES = { INR: '\u20B9', USD: '$', GBP: '\u00A3', EUR: '\u20AC' };
   var sym = '\u20B9';
@@ -623,6 +741,8 @@ body {
   function updateDots() {
     var dots = $('step-dots');
     while (dots.firstChild) dots.removeChild(dots.firstChild);
+    if (state.step === 0) { dots.style.display = 'none'; return; }
+    dots.style.display = 'flex';
     for (var i = 1; i <= 3; i++) {
       var d = document.createElement('div');
       d.className = 'step-dot';
@@ -633,16 +753,17 @@ body {
   }
 
   // Nav buttons
+  $('btn-start').addEventListener('click', function() { goStep(1); });
   $('btn-to-2').addEventListener('click', function() { goStep(2); });
   $('btn-to-3').addEventListener('click', function() { goStep(3); });
   $('btn-back-1').addEventListener('click', function() { goStep(1); });
   $('btn-back-2').addEventListener('click', function() { goStep(2); });
-  $('btn-restart').addEventListener('click', function() { goStep(1); });
+  $('btn-restart').addEventListener('click', function() { goStep(0); });
 
   // Keyboard nav
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && state.step < 3) goStep(state.step + 1);
-    if (e.key === 'Escape' && state.step > 1) goStep(state.step - 1);
+    if (e.key === 'Escape' && state.step > 0) goStep(state.step - 1);
   });
 
   // Currency
