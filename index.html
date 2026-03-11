@@ -104,6 +104,31 @@ body {
   width: 100%;
   max-width: 640px;
 }
+.step-inner.step2-combined {
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 40px;
+  align-items: start;
+}
+.step2-left, .step2-right { min-width: 0; }
+.step2-combined .hero-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+.step2-combined .hero-card { padding: 14px 16px; }
+.step2-combined .hc-value { font-size: 1.4rem; }
+.step2-combined .hc-label { font-size: 10px; }
+.step2-combined .chart-box { padding: 12px; margin-top: 10px; }
+@media (max-width: 768px) {
+  .step-inner.step2-combined {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    gap: 12px;
+  }
+  .step-inner.step2-combined .action-row { grid-column: 1; }
+  .step2-combined .hero-card { padding: 10px 12px; }
+  .step2-combined .hc-value { font-size: 1.2rem; }
+  .step2-combined .chart-box { padding: 8px; margin-top: 6px; }
+  .step2-combined .chart-box canvas { max-height: 160px; }
+}
 
 /* Step 1: Inputs */
 .step-label {
@@ -430,7 +455,7 @@ body {
 <!-- STEP 1: YOUR NUMBERS -->
 <div class="step active" id="step-1" data-step="1">
   <div class="step-inner">
-    <div class="step-label">Step 1 of 4</div>
+    <div class="step-label">Step 1 of 3</div>
     <div class="step-title">Enter Your Store's Numbers</div>
     <div class="step-subtitle">We'll calculate how much revenue you're leaving on the table.</div>
 
@@ -451,7 +476,7 @@ body {
       </div>
     </div>
 
-    <div class="bench-label">Or pick your industry benchmark CR:</div>
+    <div class="bench-label">Or pick your industry benchmark CR <span style="font-weight:400;color:var(--muted);font-size:11px;">(based on 300+ clients across industries &mdash; Growisto data)</span></div>
     <div class="bench-grid" id="bench-grid"></div>
 
     <div class="action-row">
@@ -461,91 +486,65 @@ body {
   </div>
 </div>
 
-<!-- STEP 2: SCENARIO -->
+<!-- STEP 2: SCENARIO + IMPACT (Combined) -->
 <div class="step" id="step-2" data-step="2">
-  <div class="step-inner">
-    <div class="step-label">Step 2 of 4</div>
-    <div class="step-title">Choose Your Scenario</div>
-    <div class="step-subtitle">How much can CRO improve your conversion rate?</div>
+  <div class="step-inner step2-combined">
+    <div class="step2-left">
+      <div class="step-label">Step 2 of 3</div>
+      <div class="step-title" style="font-size:1.4rem;">Choose Scenario &amp; See Impact</div>
 
-    <div class="model-toggle">
-      <button class="model-btn active" id="m-compound">Compounding (12-mo)</button>
-      <button class="model-btn" id="m-simple">Simple (Flat)</button>
-    </div>
-
-    <div class="scenario-cards" id="sc-cards"></div>
-
-    <div class="custom-row">
-      <span>Custom:</span>
-      <input type="number" id="in-improvement" value="10" min="1" max="100" step="1">
-      <span>% uplift on current CR</span>
-    </div>
-
-    <div class="preview-box" id="preview-box">
-      <div class="pv-item">
-        <div class="pv-label">Current CR</div>
-        <div class="pv-value" id="pv-old-cr">1.25%</div>
+      <div class="model-toggle">
+        <button class="model-btn active" id="m-compound">Compounding (12-mo)</button>
+        <button class="model-btn" id="m-simple">Simple (Flat)</button>
       </div>
-      <div class="pv-item">
-        <div class="pv-label">New CR (Month 12)</div>
-        <div class="pv-value" id="pv-new-cr">1.38%</div>
-      </div>
-      <div class="pv-item">
-        <div class="pv-label">CR Uplift</div>
-        <div class="pv-value" id="pv-uplift">+10%</div>
+
+      <div class="scenario-cards" id="sc-cards"></div>
+
+      <div class="custom-row">
+        <span>Custom:</span>
+        <input type="number" id="in-improvement" value="10" min="1" max="100" step="1">
+        <span>% uplift on current CR</span>
       </div>
     </div>
 
-    <div class="action-row">
+    <div class="step2-right">
+      <div class="hero-grid">
+        <div class="hero-card green">
+          <div class="hc-label">12-Month Added Revenue</div>
+          <div class="hc-value" id="h-total">-</div>
+        </div>
+        <div class="hero-card red">
+          <div class="hc-label">Monthly Cost of Inaction</div>
+          <div class="hc-value" id="h-monthly-cost">-</div>
+        </div>
+        <div class="hero-card teal">
+          <div class="hc-label">New Conversion Rate</div>
+          <div class="hc-value" id="h-new-cr">-</div>
+          <div class="hc-sub">Up from <span id="h-old-cr">-</span></div>
+        </div>
+        <div class="hero-card yellow">
+          <div class="hc-label">Daily Cost of Inaction</div>
+          <div class="hc-value" id="h-daily-cost">-</div>
+          <div class="hc-sub">Lost revenue per day</div>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="rev-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="action-row" style="grid-column: 1 / -1;">
       <button class="btn btn-ghost" id="btn-back-1">&larr; Back</button>
-      <button class="btn btn-primary" id="btn-to-3">See Your Impact &rarr;</button>
+      <button class="btn btn-primary" id="btn-to-3">View Full Breakdown &rarr;</button>
     </div>
   </div>
 </div>
 
-<!-- STEP 3: IMPACT -->
+<!-- STEP 3: BREAKDOWN -->
 <div class="step" id="step-3" data-step="3">
-  <div class="step-inner">
-    <div class="step-label">Step 3 of 4</div>
-    <div class="step-title">The Impact</div>
-    <div class="step-subtitle" id="impact-subtitle">With a 10% CR improvement over 12 months</div>
-
-    <div class="hero-grid">
-      <div class="hero-card green">
-        <div class="hc-label">12-Month Added Revenue</div>
-        <div class="hc-value" id="h-total">-</div>
-      </div>
-      <div class="hero-card red">
-        <div class="hc-label">Monthly Cost of Inaction</div>
-        <div class="hc-value" id="h-monthly-cost">-</div>
-      </div>
-      <div class="hero-card teal">
-        <div class="hc-label">New Conversion Rate</div>
-        <div class="hc-value" id="h-new-cr">-</div>
-        <div class="hc-sub">Up from <span id="h-old-cr">-</span></div>
-      </div>
-      <div class="hero-card yellow">
-        <div class="hc-label">Daily Cost of Inaction</div>
-        <div class="hc-value" id="h-daily-cost">-</div>
-        <div class="hc-sub">Lost revenue per day</div>
-      </div>
-    </div>
-
-    <div class="chart-box">
-      <canvas id="rev-chart"></canvas>
-    </div>
-
-    <div class="action-row">
-      <button class="btn btn-ghost" id="btn-back-2">&larr; Back</button>
-      <button class="btn btn-primary" id="btn-to-4">View Full Breakdown &rarr;</button>
-    </div>
-  </div>
-</div>
-
-<!-- STEP 4: BREAKDOWN -->
-<div class="step" id="step-4" data-step="4">
   <div class="step4-inner">
-    <div class="step-label">Step 4 of 4</div>
+    <div class="step-label">Step 3 of 3</div>
     <div class="step-title">Full Breakdown</div>
     <div class="step-subtitle">Month-by-month projections and scenario comparison</div>
 
@@ -573,7 +572,7 @@ body {
     </div>
 
     <div class="action-row" style="margin-top:16px;">
-      <button class="btn btn-ghost" id="btn-back-3">&larr; Back</button>
+      <button class="btn btn-ghost" id="btn-back-2">&larr; Back</button>
       <button class="btn btn-ghost" id="btn-restart">Start Over</button>
     </div>
   </div>
@@ -589,14 +588,14 @@ body {
   var sym = '\u20B9';
 
   var BENCHMARKS = [
-    { name: 'Beauty', cr: 1.44 },
-    { name: 'Food & Bev', cr: 2.05 },
-    { name: 'Health', cr: 1.70 },
-    { name: 'Fashion', cr: 0.57 },
-    { name: 'Electronics', cr: 0.15 },
-    { name: 'Home & Living', cr: 0.64 },
-    { name: 'Toys', cr: 1.11 },
-    { name: 'Jewelry', cr: 0.06 }
+    { name: 'Beauty', lo: 2.16, hi: 3.60 },
+    { name: 'Food & Bev', lo: 3.08, hi: 5.13 },
+    { name: 'Health', lo: 2.55, hi: 4.25 },
+    { name: 'Fashion', lo: 0.86, hi: 1.43 },
+    { name: 'Electronics', lo: 0.23, hi: 0.38 },
+    { name: 'Home & Living', lo: 0.96, hi: 1.60 },
+    { name: 'Toys', lo: 1.67, hi: 2.78 },
+    { name: 'Jewelry', lo: 0.09, hi: 0.15 }
   ];
 
   function $(id) { return document.getElementById(id); }
@@ -608,13 +607,13 @@ body {
     document.querySelectorAll('.step').forEach(function(el) { el.classList.remove('active'); });
     $('step-' + n).classList.add('active');
     updateDots();
-    if (n >= 3) recalculate();
+    if (n >= 2) recalculate();
   }
 
   function updateDots() {
     var dots = $('step-dots');
     while (dots.firstChild) dots.removeChild(dots.firstChild);
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 1; i <= 3; i++) {
       var d = document.createElement('div');
       d.className = 'step-dot';
       if (i === state.step) d.classList.add('active');
@@ -624,17 +623,15 @@ body {
   }
 
   // Nav buttons
-  $('btn-to-2').addEventListener('click', function() { goStep(2); updatePreview(); });
+  $('btn-to-2').addEventListener('click', function() { goStep(2); });
   $('btn-to-3').addEventListener('click', function() { goStep(3); });
-  $('btn-to-4').addEventListener('click', function() { goStep(4); });
   $('btn-back-1').addEventListener('click', function() { goStep(1); });
   $('btn-back-2').addEventListener('click', function() { goStep(2); });
-  $('btn-back-3').addEventListener('click', function() { goStep(3); });
   $('btn-restart').addEventListener('click', function() { goStep(1); });
 
   // Keyboard nav
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && state.step < 4) goStep(state.step + 1);
+    if (e.key === 'Enter' && state.step < 3) goStep(state.step + 1);
     if (e.key === 'Escape' && state.step > 1) goStep(state.step - 1);
   });
 
@@ -664,13 +661,14 @@ body {
       var nameSpan = document.createTextNode(b.name + ' ');
       var crSpan = document.createElement('span');
       crSpan.className = 'bp-cr';
-      crSpan.textContent = b.cr + '%';
+      crSpan.textContent = b.lo + '–' + b.hi + '%';
       pill.appendChild(nameSpan);
       pill.appendChild(crSpan);
+      var mid = Math.round(((b.lo + b.hi) / 2) * 100) / 100;
       pill.addEventListener('click', function() {
         grid.querySelectorAll('.bench-pill').forEach(function(p) { p.classList.remove('active'); });
         pill.classList.add('active');
-        $('in-cr').value = b.cr;
+        $('in-cr').value = mid;
       });
       grid.appendChild(pill);
     });
@@ -701,7 +699,7 @@ body {
         $('in-improvement').value = s.pct;
         container.querySelectorAll('.sc-card').forEach(function(c) { c.classList.remove('active'); });
         card.classList.add('active');
-        updatePreview();
+        if (state.step >= 2) recalculate();
       });
       container.appendChild(card);
     });
@@ -712,13 +710,13 @@ body {
     state.model = 'compound';
     $('m-compound').classList.add('active');
     $('m-simple').classList.remove('active');
-    updatePreview();
+    if (state.step >= 2) recalculate();
   });
   $('m-simple').addEventListener('click', function() {
     state.model = 'simple';
     $('m-simple').classList.add('active');
     $('m-compound').classList.remove('active');
-    updatePreview();
+    if (state.step >= 2) recalculate();
   });
 
   $('in-improvement').addEventListener('input', function() {
@@ -726,24 +724,10 @@ body {
     document.querySelectorAll('.sc-card').forEach(function(c) { c.classList.remove('active'); });
     var match = $('sc-' + state.improvement);
     if (match) match.classList.add('active');
-    updatePreview();
+    if (state.step >= 2) recalculate();
   });
 
   // Preview (Step 2)
-  function updatePreview() {
-    var cr = parseFloat($('in-cr').value) || 0;
-    var imp = state.improvement;
-    var newCR;
-    if (state.model === 'compound') {
-      newCR = cr * (1 + imp / 100);
-    } else {
-      newCR = cr * (1 + imp / 100);
-    }
-    setText('pv-old-cr', cr.toFixed(2) + '%');
-    setText('pv-new-cr', newCR.toFixed(2) + '%');
-    setText('pv-uplift', '+' + imp + '%');
-  }
-
   // Formatting
   function indianFmt(n) {
     var s = Math.round(n).toString();
@@ -799,7 +783,7 @@ body {
     var avgMonthly = totalInc / months;
 
     // Step 3 — hero cards
-    setText('impact-subtitle', 'With a ' + imp + '% CR improvement over 12 months');
+    if ($('impact-subtitle')) setText('impact-subtitle', 'With a ' + imp + '% CR improvement over 12 months');
     setText('h-total', fmt(totalInc));
     setText('h-monthly-cost', fmt(avgMonthly));
     setText('h-new-cr', final.cr.toFixed(2) + '%');
@@ -934,7 +918,7 @@ body {
 
   // Init
   updateDots();
-  updatePreview();
+  if (state.step >= 2) recalculate();
 })();
 </script>
 </body>
