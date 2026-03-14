@@ -41,6 +41,12 @@ body {
   height: 100vh;
 }
 
+/* Embed mode — for iframe embedding in lead audit decks */
+body.embed-mode { background: transparent; overflow: auto; height: auto; }
+body.embed-mode .top-bar { display: none; }
+body.embed-mode .step { padding-top: 16px; }
+body.embed-mode #step-0 { display: none !important; }
+
 /* Top Bar */
 .top-bar {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -1120,6 +1126,68 @@ body {
 
   $('btn-copy-2').addEventListener('click', copyResults);
   $('btn-copy-3').addEventListener('click', copyResults);
+
+  // URL Parameter Support & Embed Mode
+  // Usage: ?revenue=5000000&cr=1.25&improvement=10&step=2&embed=true&industry=Food
+  // embed=true: hides top bar + landing page, auto-jumps to step 2 (results view)
+  // industry: auto-selects matching benchmark pill (partial match, case-insensitive)
+  (function initFromURL() {
+    var params = new URLSearchParams(window.location.search);
+
+    // Embed mode: hide top bar, remove body overflow restriction
+    if (params.get('embed') === 'true') {
+      var topBar = document.querySelector('.top-bar');
+      if (topBar) topBar.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      document.body.style.height = 'auto';
+      document.body.classList.add('embed-mode');
+    }
+
+    // Pre-fill revenue
+    if (params.get('revenue')) {
+      $('in-revenue').value = params.get('revenue');
+    }
+
+    // Pre-fill conversion rate
+    if (params.get('cr')) {
+      $('in-cr').value = params.get('cr');
+    }
+
+    // Pre-fill improvement percentage
+    if (params.get('improvement')) {
+      var imp = parseFloat(params.get('improvement'));
+      state.improvement = imp;
+      $('in-improvement').value = imp;
+      // Highlight matching scenario card
+      document.querySelectorAll('.sc-card').forEach(function(c) { c.classList.remove('active'); });
+      var match = $('sc-' + imp);
+      if (match) match.classList.add('active');
+    }
+
+    // Auto-select industry benchmark pill
+    if (params.get('industry')) {
+      var target = params.get('industry').toLowerCase();
+      document.querySelectorAll('.bench-pill').forEach(function(pill) {
+        if (pill.textContent.toLowerCase().indexOf(target) !== -1) {
+          pill.classList.add('active');
+        }
+      });
+    }
+
+    // Currency
+    if (params.get('currency')) {
+      var sel = $('currency-sel');
+      sel.value = params.get('currency').toUpperCase();
+      sym = CURRENCIES[sel.value] || sym;
+      $('pfx-rev').textContent = sym;
+    }
+
+    // Auto-jump to step (default: step 2 in embed mode for immediate results)
+    var targetStep = params.get('step') ? parseInt(params.get('step')) : (params.get('embed') === 'true' ? 2 : 0);
+    if (targetStep > 0 && ($('in-revenue').value && $('in-cr').value)) {
+      goStep(targetStep);
+    }
+  })();
 
   // Init
   updateDots();
